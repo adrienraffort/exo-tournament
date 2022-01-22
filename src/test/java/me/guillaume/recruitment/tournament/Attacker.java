@@ -12,6 +12,8 @@ public abstract class Attacker {
 	
 	protected Weapon weapon;
 	
+	protected boolean hasArmor;
+	
 	
 	protected int hitPoints() {
 		return this.pv;
@@ -19,11 +21,14 @@ public abstract class Attacker {
 	
 	
 	protected void attack(Attacker at, int round) {
-	
 		
 		// If the attacker has no shield and is not protected by the blow
 		if (!at.hasBuckler || !protect(round)) {
-			at.pv = at.pv - this.dmg;
+			if (at.hasArmor && this.dmg > 0) { // If there are an armor and if the damage > 0, we add 3 points (Reduce the damage by 3)
+				at.pv = at.pv - this.dmg + 3;
+			}else {
+				at.pv = at.pv - this.dmg;
+			}
 		}else {
 			at.buckerProtection += 1;
 		}

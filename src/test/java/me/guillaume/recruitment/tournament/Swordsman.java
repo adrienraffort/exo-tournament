@@ -36,6 +36,11 @@ public class Swordsman extends Attacker {
 			this.hasBuckler = true;
 		}
 		
+		if (what == "armor") {
+			this.hasArmor = true;
+			this.dmg -= 1;
+		}
+		
 		
 		return this;
 	}
