@@ -2,10 +2,13 @@ package me.guillaume.recruitment.tournament;
 
 public class Highlander extends Attacker {
 	
+	private static int PV = 150;
+	
 	private int attackNumber;
+	private boolean isVeteran = false;
 
 	Highlander(){
-		this.pv = 150;
+		this.pv = PV;
 		this.dmg = 12;
 		this.weapon = Weapon.GreatSword;
 		
@@ -13,6 +16,18 @@ public class Highlander extends Attacker {
 	}
 	
 	
+	public Highlander(String caracteristic) {
+		this.pv = PV;
+		this.dmg = 12;
+		this.weapon = Weapon.GreatSword;
+		
+		this.attackNumber = 1;
+		
+		this.isVeteran = caracteristic == "Veteran" ? true : false;
+
+	}
+
+
 	public void addAttack() {
 		this.attackNumber += 1;
 	}
@@ -23,6 +38,10 @@ public class Highlander extends Attacker {
 	
 	@Override
 	protected void attack(Attacker at, int round) {
+		
+		if(this.isVeteran && this.pv <= 0.3 * PV) {
+			this.dmg *= 2;
+		}
 		
 		this.dmg = cannotAttack() ? 0 : this.dmg; // The dmg = 0 if the highlander can attack, in reality, he attack with 0 dmg.
 	

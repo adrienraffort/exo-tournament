@@ -1,13 +1,24 @@
 package me.guillaume.recruitment.tournament;
 
-import org.assertj.core.internal.bytebuddy.asm.Advice.This;
 
 public class Swordsman extends Attacker {
+	
+	private boolean isVicious = false;
+	
+	private boolean activeExtraDmg = false;
 	
 	Swordsman(){
 		this.pv = 100;
 		this.dmg = 5;
 		this.weapon = Weapon.SWORD;
+	}
+	
+	Swordsman(String caracteristic){
+		this.pv = 100;
+		this.dmg = 5;
+		this.weapon = Weapon.SWORD;
+		this.isVicious = caracteristic == "Vicious" ? true : false;
+		this.activeExtraDmg = true;
 	}
 	
 	
@@ -26,8 +37,24 @@ public class Swordsman extends Attacker {
 			
 			round ++;
 			
-			System.out.println(this.pv + "  " + at.pv);
 		}	
+	}
+	
+	@Override
+	protected void attack(Attacker at, int round) {
+		increaseDmgVicious(round);
+		
+		super.attack(at, round);
+	}
+	
+	public void increaseDmgVicious(int round) {
+		if (this.isVicious && activeExtraDmg) {
+			this.dmg = 20 + this.dmg;
+			this.activeExtraDmg = false;
+		}
+		if (this.isVicious && round > 2 && !activeExtraDmg) {
+			this.dmg = getDefaultDmg();
+		}
 	}
 	
 	
@@ -36,13 +63,29 @@ public class Swordsman extends Attacker {
 			this.hasBuckler = true;
 		}
 		
+		if (what == "axe") {
+			this.weapon = Weapon.AXE;
+		}
+		
 		if (what == "armor") {
 			this.hasArmor = true;
-			this.dmg -= 1;
 		}
+		
+		this.dmg = getDefaultDmg();
 		
 		
 		return this;
+	}
+	
+	private int getDefaultDmg() {
+		int e = 0;
+		switch (weapon) {
+			case SWORD: e = 5; break;
+			case AXE: e = 6; break;
+			case GreatSword: e = 12; break;
+		} 
+		
+		return e -= (hasArmor ? 1 : 0);
 	}
 	
 	
