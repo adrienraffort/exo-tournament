@@ -7,21 +7,39 @@ public class Swordsman extends Attacker {
 	Swordsman(){
 		this.pv = 100;
 		this.dmg = 5;
+		this.weapon = Weapon.SWORD;
 	}
 	
 	
 	public void engage(Attacker at) {
+		
+		int round = 1;
+		
 		while (this.pv > 0 && at.pv > 0){
-			this.attack(at);
+			this.attack(at, round);
 			
 			if (at.pv == 0) {
 				break;
 			}
 			
-			at.attack(this);
+			at.attack(this, round);
 			
+			round ++;
+			
+			System.out.println(this.pv + "  " + at.pv);
 		}	
 	}
+	
+	
+	public Swordsman equip(String what) {
+		if (what == "buckler") {
+			this.hasBuckler = true;
+		}
+		
+		
+		return this;
+	}
+	
 	
 
 }
